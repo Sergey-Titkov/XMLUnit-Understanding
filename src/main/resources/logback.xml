@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <!-- Свойство задается в командной строке: Например -DconsoleEncoding=UTF8 -->
+      <charset>${consoleEncoding}</charset>
+    </encoder>
+  </appender>
+
+  <root level="OFF">
+    <appender-ref ref="STDOUT"/>
+  </root>
+
+</configuration>
