@@ -19,8 +19,8 @@ import java.net.URL;
 public class ElementQualifierDiffTest {
 
   public static void main(String[] args) {
-    URL url1 = ElementQualifierDiffTest.class.getResource("Structurally-Etalon.XML");
-    URL url2 = ElementQualifierDiffTest.class.getResource("Structurally-Test.XML");
+    URL url1 = ElementQualifierDiffTest.class.getResource("/Structurally-Etalon.XML");
+    URL url2 = ElementQualifierDiffTest.class.getResource("/Structurally-Test.XML");
     FileReader fr1 = null;
     FileReader fr2 = null;
     try {
@@ -34,6 +34,12 @@ public class ElementQualifierDiffTest {
       Diff diff = new Diff(fr1, fr2);
       System.out.println("Similar? " + diff.similar());
       System.out.println("Identical? " + diff.identical());
+
+      XMLUnit.setCompareUnmatched(Boolean.FALSE);
+      XMLUnit.setIgnoreDiffBetweenTextAndCDATA(Boolean.TRUE);
+      XMLUnit.setNormalizeWhitespace(Boolean.TRUE);
+      XMLUnit.setIgnoreComments(Boolean.TRUE);
+      XMLUnit.setIgnoreWhitespace(Boolean.TRUE);
 
       DetailedDiff detDiff = new DetailedDiff(diff);
       detDiff.overrideMatchTracker(new MatchTrackerImpl());
