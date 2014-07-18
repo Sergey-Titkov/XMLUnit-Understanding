@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.List;
 
 public class ElementQualifierDiffTest {
 
@@ -30,21 +31,34 @@ public class ElementQualifierDiffTest {
       e.printStackTrace();
     }
 
+    XMLUnit.setIgnoreComments(Boolean.TRUE);
+    XMLUnit.setIgnoreWhitespace(Boolean.TRUE);
+    XMLUnit.setNormalizeWhitespace(Boolean.TRUE);
+    XMLUnit.setIgnoreDiffBetweenTextAndCDATA(Boolean.TRUE);
+    XMLUnit.setIgnoreAttributeOrder(Boolean.TRUE);
+    XMLUnit.setCompareUnmatched(Boolean.FALSE);
+
     try {
       Diff diff = new Diff(fr1, fr2);
       System.out.println("Similar? " + diff.similar());
       System.out.println("Identical? " + diff.identical());
 
-      XMLUnit.setCompareUnmatched(Boolean.FALSE);
-      XMLUnit.setIgnoreDiffBetweenTextAndCDATA(Boolean.TRUE);
-      XMLUnit.setNormalizeWhitespace(Boolean.TRUE);
-      XMLUnit.setIgnoreComments(Boolean.TRUE);
-      XMLUnit.setIgnoreWhitespace(Boolean.TRUE);
 
+        DetailedDiff detDiff = new DetailedDiff(diff);
+        List differences = detDiff.getAllDifferences();
+        for (Object object : differences) {
+          Difference difference = (Difference)object;
+          System.out.println("***********************");
+          System.out.println(difference);
+          System.out.println("***********************");
+        }
+
+      /*
       DetailedDiff detDiff = new DetailedDiff(diff);
       detDiff.overrideMatchTracker(new MatchTrackerImpl());
       detDiff.overrideElementQualifier(new ElementNameQualifier());
       detDiff.getAllDifferences();
+*/
 
     } catch (SAXException e) {
       e.printStackTrace();

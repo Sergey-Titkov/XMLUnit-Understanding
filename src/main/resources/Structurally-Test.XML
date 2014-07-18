@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <OBJECT>
-  <NAME>OBJECT_NAME</NAME>
   <CMNT>Некий объект</CMNT>
+  <NAME>OBJECT_NAME</NAME>
   <ORDER_DOES_NOT_MATTER_LIST>
-    <ORDER_DOES_NOT_MATTER_ITEM>
-      <CMNT>Это третий элемент</CMNT>
-      <NAME>THIRD</NAME>
-      <DATATYPE>CHAR</DATATYPE>
-      <NOT_NULL/>
-    </ORDER_DOES_NOT_MATTER_ITEM>
-
     <ORDER_DOES_NOT_MATTER_ITEM>
       <NAME>FIRST</NAME>
       <DATATYPE>NUMBER</DATATYPE>
       <CMNT>Это первый элемент</CMNT>
+      <NOT_NULL/>
+    </ORDER_DOES_NOT_MATTER_ITEM>
+
+    <ORDER_DOES_NOT_MATTER_ITEM>
+      <CMNT>Это третий элемент</CMNT>
+      <NAME>THIRD</NAME>
+      <DATATYPE>CHAR</DATATYPE>
       <NOT_NULL/>
     </ORDER_DOES_NOT_MATTER_ITEM>
 
@@ -23,45 +23,44 @@
       <CMNT>Это второй элемент</CMNT>
       <DATATYPE>VARCAHR</DATATYPE>
     </ORDER_DOES_NOT_MATTER_ITEM>
-
   </ORDER_DOES_NOT_MATTER_LIST>
 
+  <!--
+    <ORDER_IS_MATTER_LIST>
 
-  <ORDER_IS_MATTER_LIST>
+      <ORDER_IS_MATTER_ITEM>
+        <NAME>SECOND</NAME>
+        <COL_LIST>
+          <COL_LIST_ITEM>
+            <NAME>AAAA</NAME>
+            <NAME>BBBB</NAME>
+            <NAME>CCCC</NAME>
+          </COL_LIST_ITEM>
+        </COL_LIST>
+      </ORDER_IS_MATTER_ITEM>
 
-    <ORDER_IS_MATTER_ITEM>
-      <NAME>SECOND</NAME>
-      <COL_LIST>
-        <COL_LIST_ITEM>
-          <NAME>AAAA</NAME>
-          <NAME>BBBB</NAME>
-          <NAME>CCCC</NAME>
-        </COL_LIST_ITEM>
-      </COL_LIST>
-    </ORDER_IS_MATTER_ITEM>
+      <ORDER_IS_MATTER_ITEM>
+        <NAME>FIRST</NAME>
+        <COL_LIST>
+          <COL_LIST_ITEM>
+            <NAME>ONE</NAME>
+            <NAME>TWO</NAME>
+            <NAME>THREE</NAME>
+          </COL_LIST_ITEM>
+        </COL_LIST>
+      </ORDER_IS_MATTER_ITEM>
 
-    <ORDER_IS_MATTER_ITEM>
-      <NAME>FIRST</NAME>
-      <COL_LIST>
-        <COL_LIST_ITEM>
-          <NAME>ONE</NAME>
-          <NAME>TWO</NAME>
-          <NAME>THREE</NAME>
-        </COL_LIST_ITEM>
-      </COL_LIST>
-    </ORDER_IS_MATTER_ITEM>
+      <ORDER_IS_MATTER_ITEM>
+        <NAME>THIRD</NAME>
+        <COL_LIST>
+          <COL_LIST_ITEM>
+            <NAME>0001</NAME>
+            <NAME>0002</NAME>
+            <NAME>0003</NAME>
+          </COL_LIST_ITEM>
+        </COL_LIST>
+      </ORDER_IS_MATTER_ITEM>
 
-    <ORDER_IS_MATTER_ITEM>
-      <NAME>THIRD</NAME>
-      <COL_LIST>
-        <COL_LIST_ITEM>
-          <NAME>0001</NAME>
-          <NAME>0002</NAME>
-          <NAME>0003</NAME>
-        </COL_LIST_ITEM>
-      </COL_LIST>
-    </ORDER_IS_MATTER_ITEM>
-
-  </ORDER_IS_MATTER_LIST>
-
+    </ORDER_IS_MATTER_LIST>
+  -->
 </OBJECT>
