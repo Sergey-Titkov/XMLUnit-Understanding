@@ -26,6 +26,22 @@ public class ElementQualifierDiffTest {
     return result;
   }
 
+  private static String printNode(Node node) {
+    if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
+      StringWriter sw = new StringWriter();
+      try {
+        Transformer t = TransformerFactory.newInstance().newTransformer();
+        t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        t.transform(new DOMSource(node), new StreamResult(sw));
+      } catch (TransformerException te) {
+        System.out.println("nodeToString Transformer Exception");
+      }
+      return sw.toString();
+
+    }
+    return null;
+  }
+
   public static void main(String[] args) {
     String template = "";
     String etalonXML = "";
@@ -93,9 +109,50 @@ public class ElementQualifierDiffTest {
       List differences = detDiff.getAllDifferences();
       for (Object object : differences) {
         Difference difference = (Difference) object;
-        System.out.println("***********************");
+        System.out.println("####################");
         System.out.println(difference);
-        System.out.println("***********************");
+        System.out.println("####################");
+/*
+Вот xsd схема того как Jenkins обрабатывает XML от JUnit:
+https://svn.jenkins-ci.org/trunk/hudson/dtkit/dtkit-format/dtkit-junit-model/src/main/resources/com/thalesgroup/dtkit/junit/model/xsd/junit-4.xsd
+
+Исходя из этого получается:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite
+           tests="Сколько тестов"
+           package="OBJECT" <- TABLE, SEQ и прочее
+           name="Из тега NAME"
+>
+
+   <testcase name="Имя теста, приедся как то гененрить, посмотреть что есть в difference"> </testcase>
+   <testcase name="Это провальный тест, у нас походу всегда провальные?">
+     <failure message="test failure">Тут длинное описание то, что не совпало.
+</failure>
+
+   </testcase>
+</testsuite>
+
+Необходимо реализовать
+
+ */
+              /*
+        if (difference != null) {
+          NodeDetail controlNode = difference.getControlNodeDetail();
+          NodeDetail testNode = difference.getTestNodeDetail();
+          String controlNodeValue = printNode(controlNode.getNode());
+          String testNodeValue = printNode(testNode.getNode());
+          if (controlNodeValue != null) {
+            System.out.println("####################");
+            System.out.println("Control Node: " + controlNodeValue);
+          }
+          if (testNodeValue != null) {
+            System.out.println("Test Node: " + testNodeValue);
+            System.out.println("####################");
+          }
+
+         */
+
       }
 
       /*
