@@ -1,9 +1,14 @@
 package foo.bar;
 
 import org.custommonkey.xmlunit.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -98,12 +103,81 @@ public class ElementQualifierDiffTest {
     XMLUnit.setIgnoreDiffBetweenTextAndCDATA(Boolean.TRUE);
     XMLUnit.setIgnoreAttributeOrder(Boolean.TRUE);
     XMLUnit.setCompareUnmatched(Boolean.FALSE);
+/*
+
+// здесь создаем документ
+DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+DocumentBuilder build = factory.newDocumentBuilder();
+Document doc = build.newDocument();
+
+Element rootElement = doc.createElement("root");
+rootElement.setAttribute("atr_name", "bla-bla-bla");
+Element body = doc.createElement("body");
+Text textNode = doc.createTextNode(value);
+body.appendChild(textNode);
+rootElement.appendChild(body);
+doc.appendChild(rootElement);
+
+// здесь пишем в файл
+Transformer t = TransformerFactory.newInstance().newTransformer();
+t.setOutputProperty(OutputKeys.INDENT, "yes");
+t.transform(new DOMSource(doc), new StreamResult(new FileOutputStream(PATH + "tempXML.xml")));
+
+ */
 
     try {
+      // Готовим отчет
+      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      DocumentBuilder build = factory.newDocumentBuilder();
+      Document doc = build.newDocument();
+
+      Element testsuites = doc.createElement("testsuites");
+      testsuites.setAttribute("name", "OBJECT");
+      doc.appendChild(testsuites);
+
+      Element testsuite = doc.createElement("testsuite");
+      testsuite.setAttribute("tests", "0");
+      testsuite.setAttribute("name", "NAME");
+      testsuites.appendChild(testsuite);
+/*
+
+Необходимо получить XML принимаемый Jenkinsom за XML от JUnit.
+1. Сформировть XML если все совпало:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<testsuites name="Имя тега корня: OBJECT, TABLE, etc">
+  <testsuite name="Имя вехнего уровня /NAME" tests="1">
+    <testcase name="Имя тега корня.Имя вехнего уровня"/>
+  </testsuite>
+</testsuites>
+
+2. Проверить как это переварил Jenkins
+
+3. Сформировть XML если не совпало :
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<testsuites name="Имя тега корня: OBJECT, TABLE, etc">
+  <testsuite name="Имя вехнего уровня /NAME" tests="1">
+    <testcase name="Difference+Index">
+       <failure message="test failure">
+         difference вывести как есть.
+
+       </failure>
+   </testcase>
+
+  </testsuite>
+</testsuites>
+
+4. Проверить как это переварил Jenkins
+
+ */
       Diff diff = new Diff(new StringReader(etalonXML), new StringReader(testXML));
       System.out.println("Similar? " + diff.similar());
       System.out.println("Identical? " + diff.identical());
-
+      if (diff.identical()){
+        Element testcase = doc.createElement("testcase");
+        testcase.setAttribute("name", "OBJECT.NAME.Имя");
+        testsuite.appendChild(testcase);
+        testsuite.setAttribute("tests", "1");
+      }
 
       DetailedDiff detDiff = new DetailedDiff(diff);
       List differences = detDiff.getAllDifferences();
@@ -112,6 +186,12 @@ public class ElementQualifierDiffTest {
         System.out.println("####################");
         System.out.println(difference);
         System.out.println("####################");
+      }
+      // здесь пишем в файл
+      Transformer t = TransformerFactory.newInstance().newTransformer();
+      t.setOutputProperty(OutputKeys.INDENT, "yes");
+      t.transform(new DOMSource(doc), new StreamResult(new FileOutputStream("./" + "OBJECT-TEST.xml")));
+
 /*
 Вот xsd схема того как Jenkins обрабатывает XML от JUnit:
 https://svn.jenkins-ci.org/trunk/hudson/dtkit/dtkit-format/dtkit-junit-model/src/main/resources/com/thalesgroup/dtkit/junit/model/xsd/junit-4.xsd
@@ -153,7 +233,7 @@ https://svn.jenkins-ci.org/trunk/hudson/dtkit/dtkit-format/dtkit-junit-model/src
 
          */
 
-      }
+
 
       /*
       DetailedDiff detDiff = new DetailedDiff(diff);
@@ -166,6 +246,12 @@ https://svn.jenkins-ci.org/trunk/hudson/dtkit/dtkit-format/dtkit-junit-model/src
       e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
+    } catch (ParserConfigurationException e) {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+    } catch (TransformerConfigurationException e) {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+    } catch (TransformerException e) {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
     }
   }
 
