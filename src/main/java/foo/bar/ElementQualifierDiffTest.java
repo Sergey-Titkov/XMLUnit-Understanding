@@ -141,8 +141,24 @@ t.transform(new DOMSource(doc), new StreamResult(new FileOutputStream(PATH + "te
       testsuites.appendChild(testsuite);
 /*
 
-Необходимо получить XML принимаемый Jenkinsom за XML от JUnit.
+Необходимо получить XML принимаемый Jenkins за XML от JUnit.
 1. Сформировть XML если все совпало:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+  <testsuite name="<Тип>.<Имя таблицы>" tests="1">
+    <testcase classname="<Тип>.<Имя таблицы>" name="Имя теста"/>
+  </testsuite>
+Примеры:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+  <testsuite name="TABLE.FFF" tests="1">
+    <testcase classname="TABLE.FFF" name="JJJ"/>
+  </testsuite>
+
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+  <testsuite name="SEQUENCES.SC_SEQ" tests="1">
+    <testcase classname="SEQUENCES.SC_SEQ" name="ZZZ"/>
+  </testsuite>
+
+
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <testsuites name="Имя тега корня: OBJECT, TABLE, etc">
   <testsuite name="Имя вехнего уровня /NAME" tests="1">
@@ -150,23 +166,43 @@ t.transform(new DOMSource(doc), new StreamResult(new FileOutputStream(PATH + "te
   </testsuite>
 </testsuites>
 
-2. Проверить как это переварил Jenkins
-
 3. Сформировть XML если не совпало :
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<testsuites name="Имя тега корня: OBJECT, TABLE, etc">
-  <testsuite name="Имя вехнего уровня /NAME" tests="1">
-    <testcase name="Difference+Index">
-       <failure message="test failure">
-         difference вывести как есть.
+   <testsuite name="<Тип>.<Имя таблицы>" tests="<количество тестов>">
+    <testcase classname="<Тип>.<Имя таблицы>" name="<Начальный текст>"/>
+      <failure message="test failure" type="junit.framework.ComparisonFailure">
+        <![CDATA[
+        Полный текст сравнения, только в этих тегах!
+        ]]>
+       </failure>
+    </testcase>
 
+
+Примеры:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+ <testsuite name="TABLE.SC_B2B_USERS" tests="3">
+    <testcase classname="TABLE.SC_B2B_USERS" name="Expected text value '0003' but was '0002' - comparing">
+       <failure message="test failure" type="junit.framework.ComparisonFailure">
+       <![CDATA[
+         Expected text value '0003' but was '00031' - comparing <NAME ...>0003</NAME> at /OBJECT[1]/ORDER_IS_MATTER_LIST[1]/ORDER_IS_MATTER_ITEM[3]/COL_LIST[1]/COL_LIST_ITEM[1]/NAME[1]/text()[1] to <NAME ...>00031</NAME> at /OBJECT[1]/ORDER_IS_MATTER_LIST[1]/ORDER_IS_MATTER_ITEM[3]/COL_LIST[1]/COL_LIST_ITEM[1]/NAME[1]/text()[1]
+   ]]>
        </failure>
    </testcase>
-
+    <testcase classname="TABLE.SC_B2B_USERS" name="Expected text value '0003' but was '0002' - comparing">
+       <failure message="test failure" type="junit.framework.ComparisonFailure">
+       <![CDATA[
+          Expected text value '0003' but was '0002' - comparing <NAME ...>0003</NAME> at /OBJECT[1]/ORDER_IS_MATTER_LIST[1]/ORDER_IS_MATTER_ITEM[3]/COL_LIST[1]/COL_LIST_ITEM[1]/NAME[1]/text()[1] to <NAME ...>0002</NAME> at /OBJECT[1]/ORDER_IS_MATTER_LIST[1]/ORDER_IS_MATTER_ITEM[3]/COL_LIST[1]/COL_LIST_ITEM[1]/NAME[1]/text()[1]
+   ]]>
+       </failure>
+   </testcase>
+    <testcase classname="TABLE.SC_B2B_USERS" name="Expected text value '0002' but was '0003' - comparing">
+       <failure message="test failure" type="junit.framework.ComparisonFailure">
+       <![CDATA[
+          Expected text value '0002' but was '0003' - comparing <NAME ...>0002</NAME> at /OBJECT[1]/ORDER_IS_MATTER_LIST[1]/ORDER_IS_MATTER_ITEM[3]/COL_LIST[1]/COL_LIST_ITEM[1]/NAME[2]/text()[1] to <NAME ...>0003</NAME> at /OBJECT[1]/ORDER_IS_MATTER_LIST[1]/ORDER_IS_MATTER_ITEM[3]/COL_LIST[1]/COL_LIST_ITEM[1]/NAME[2]/text()[1]
+   ]]>
+       </failure>
+   </testcase>
   </testsuite>
-</testsuites>
-
-4. Проверить как это переварил Jenkins
 
  */
       Diff diff = new Diff(new StringReader(etalonXML), new StringReader(testXML));
