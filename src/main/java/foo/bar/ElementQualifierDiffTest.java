@@ -59,50 +59,6 @@ public class ElementQualifierDiffTest {
     } catch (IOException e) {
       e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
     }
-
-    // Производим сортировку для эталонного XML.
-    try {
-      TransformerFactory transformerFactory = TransformerFactory.newInstance();
-      StringWriter stringWriter = new StringWriter();
-      Transformer transformer = transformerFactory
-        .newTransformer(new javax.xml.transform.stream.StreamSource(new StringReader(template)));
-      transformer.transform(
-        new javax.xml.transform.stream.StreamSource(new StringReader(readResourceToString("/Structurally-Etalon.XML"))),
-        new javax.xml.transform.stream.StreamResult(stringWriter)
-      );
-      etalonXML = stringWriter.toString();
-    } catch (TransformerConfigurationException e) {
-      e.printStackTrace();
-    } catch (TransformerException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-    }
-
-    // Производим сортировку для тестового XML.
-    try {
-      TransformerFactory transformerFactory = TransformerFactory.newInstance();
-      StringWriter stringWriter = new StringWriter();
-      Transformer transformer = transformerFactory
-        .newTransformer(new javax.xml.transform.stream.StreamSource(new StringReader(template)));
-      transformer.transform(
-        new javax.xml.transform.stream.StreamSource(new StringReader(testXML)),
-        new javax.xml.transform.stream.StreamResult(stringWriter)
-      );
-      testXML = stringWriter.toString();
-    } catch (TransformerConfigurationException e) {
-      e.printStackTrace();
-    } catch (TransformerException e) {
-      e.printStackTrace();
-    }
-
-
-    XMLUnit.setIgnoreComments(Boolean.TRUE);
-    XMLUnit.setIgnoreWhitespace(Boolean.TRUE);
-    XMLUnit.setNormalizeWhitespace(Boolean.TRUE);
-    XMLUnit.setIgnoreDiffBetweenTextAndCDATA(Boolean.TRUE);
-    XMLUnit.setIgnoreAttributeOrder(Boolean.TRUE);
-    XMLUnit.setCompareUnmatched(Boolean.FALSE);
 /*
 
 // здесь создаем документ
@@ -205,7 +161,8 @@ t.transform(new DOMSource(doc), new StreamResult(new FileOutputStream(PATH + "te
   </testsuite>
 
  */
-      Diff diff = new Diff(new StringReader(etalonXML), new StringReader(testXML));
+      Diff diff = CompareTwoObjectXML.compareXML(etalonXML, template,testXML,template );
+
       System.out.println("Similar? " + diff.similar());
       System.out.println("Identical? " + diff.identical());
       if (diff.identical()){
