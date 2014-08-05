@@ -1,33 +1,35 @@
 package foo.bar;
 
-import org.custommonkey.xmlunit.*;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.custommonkey.xmlunit.Diff;
+import org.custommonkey.xmlunit.Difference;
+import org.custommonkey.xmlunit.MatchTracker;
+import org.custommonkey.xmlunit.NodeDetail;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
-import java.util.List;
 
 public class ElementQualifierDiffTest {
 
   private static String readResourceToString(String resourceName) throws IOException {
-      String result = "";
-      // Прочитать ресурс в строку, везде кодировка UTF-8
-      try (BufferedReader bufferedReader = new BufferedReader(new FileReader(ElementQualifierDiffTest.class.getResource(resourceName).getPath()))) {
-        StringBuffer stringBuffer = new StringBuffer();
-        String currentLine = "";
-        while ((currentLine = bufferedReader.readLine()) != null) {
-          stringBuffer.append(currentLine).append("\n");
-        }
-        result = stringBuffer.toString();
+    String result = "";
+    // Прочитать ресурс в строку, везде кодировка UTF-8
+    try (BufferedReader bufferedReader = new BufferedReader(
+      new FileReader(
+        ElementQualifierDiffTest.class.getResource(resourceName).getPath()
+      )
+    )) {
+      StringBuffer stringBuffer = new StringBuffer();
+      String currentLine = "";
+      while ((currentLine = bufferedReader.readLine()) != null) {
+        stringBuffer.append(currentLine).append("\n");
       }
+      result = stringBuffer.toString();
+    }
     return result;
   }
 
@@ -59,181 +61,16 @@ public class ElementQualifierDiffTest {
     } catch (IOException e) {
       e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
     }
-/*
-
-// здесь создаем документ
-DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-DocumentBuilder build = factory.newDocumentBuilder();
-Document doc = build.newDocument();
-
-Element rootElement = doc.createElement("root");
-rootElement.setAttribute("atr_name", "bla-bla-bla");
-Element body = doc.createElement("body");
-Text textNode = doc.createTextNode(value);
-body.appendChild(textNode);
-rootElement.appendChild(body);
-doc.appendChild(rootElement);
-
-// здесь пишем в файл
-Transformer t = TransformerFactory.newInstance().newTransformer();
-t.setOutputProperty(OutputKeys.INDENT, "yes");
-t.transform(new DOMSource(doc), new StreamResult(new FileOutputStream(PATH + "tempXML.xml")));
-
- */
 
     try {
-      // Готовим отчет
-      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-      DocumentBuilder build = factory.newDocumentBuilder();
-      Document doc = build.newDocument();
+      Diff diff = CompareTwoObjectXML.compareXML(etalonXML, template, testXML, template);
+      // Надо получать type и name
+      String testSute = CreateJUnitReport.createReport("type", "name", diff);
 
-      Element testsuites = doc.createElement("testsuites");
-      testsuites.setAttribute("name", "OBJECT");
-      doc.appendChild(testsuites);
-
-      Element testsuite = doc.createElement("testsuite");
-      testsuite.setAttribute("tests", "0");
-      testsuite.setAttribute("name", "NAME");
-      testsuites.appendChild(testsuite);
-/*
-
-Необходимо получить XML принимаемый Jenkins за XML от JUnit.
-1. Сформировть XML если все совпало:
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-  <testsuite name="<Тип>.<Имя таблицы>" tests="1">
-    <testcase classname="<Тип>.<Имя таблицы>" name="Имя теста"/>
-  </testsuite>
-Примеры:
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-  <testsuite name="TABLE.FFF" tests="1">
-    <testcase classname="TABLE.FFF" name="JJJ"/>
-  </testsuite>
-
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-  <testsuite name="SEQUENCES.SC_SEQ" tests="1">
-    <testcase classname="SEQUENCES.SC_SEQ" name="ZZZ"/>
-  </testsuite>
-
-
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<testsuites name="Имя тега корня: OBJECT, TABLE, etc">
-  <testsuite name="Имя вехнего уровня /NAME" tests="1">
-    <testcase name="Имя тега корня.Имя вехнего уровня"/>
-  </testsuite>
-</testsuites>
-
-3. Сформировть XML если не совпало :
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-   <testsuite name="<Тип>.<Имя таблицы>" tests="<количество тестов>">
-    <testcase classname="<Тип>.<Имя таблицы>" name="<Начальный текст>"/>
-      <failure message="test failure" type="junit.framework.ComparisonFailure">
-        <![CDATA[
-        Полный текст сравнения, только в этих тегах!
-        ]]>
-       </failure>
-    </testcase>
-
-
-Примеры:
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
- <testsuite name="TABLE.SC_B2B_USERS" tests="3">
-    <testcase classname="TABLE.SC_B2B_USERS" name="Expected text value '0003' but was '0002' - comparing">
-       <failure message="test failure" type="junit.framework.ComparisonFailure">
-       <![CDATA[
-         Expected text value '0003' but was '00031' - comparing <NAME ...>0003</NAME> at /OBJECT[1]/ORDER_IS_MATTER_LIST[1]/ORDER_IS_MATTER_ITEM[3]/COL_LIST[1]/COL_LIST_ITEM[1]/NAME[1]/text()[1] to <NAME ...>00031</NAME> at /OBJECT[1]/ORDER_IS_MATTER_LIST[1]/ORDER_IS_MATTER_ITEM[3]/COL_LIST[1]/COL_LIST_ITEM[1]/NAME[1]/text()[1]
-   ]]>
-       </failure>
-   </testcase>
-    <testcase classname="TABLE.SC_B2B_USERS" name="Expected text value '0003' but was '0002' - comparing">
-       <failure message="test failure" type="junit.framework.ComparisonFailure">
-       <![CDATA[
-          Expected text value '0003' but was '0002' - comparing <NAME ...>0003</NAME> at /OBJECT[1]/ORDER_IS_MATTER_LIST[1]/ORDER_IS_MATTER_ITEM[3]/COL_LIST[1]/COL_LIST_ITEM[1]/NAME[1]/text()[1] to <NAME ...>0002</NAME> at /OBJECT[1]/ORDER_IS_MATTER_LIST[1]/ORDER_IS_MATTER_ITEM[3]/COL_LIST[1]/COL_LIST_ITEM[1]/NAME[1]/text()[1]
-   ]]>
-       </failure>
-   </testcase>
-    <testcase classname="TABLE.SC_B2B_USERS" name="Expected text value '0002' but was '0003' - comparing">
-       <failure message="test failure" type="junit.framework.ComparisonFailure">
-       <![CDATA[
-          Expected text value '0002' but was '0003' - comparing <NAME ...>0002</NAME> at /OBJECT[1]/ORDER_IS_MATTER_LIST[1]/ORDER_IS_MATTER_ITEM[3]/COL_LIST[1]/COL_LIST_ITEM[1]/NAME[2]/text()[1] to <NAME ...>0003</NAME> at /OBJECT[1]/ORDER_IS_MATTER_LIST[1]/ORDER_IS_MATTER_ITEM[3]/COL_LIST[1]/COL_LIST_ITEM[1]/NAME[2]/text()[1]
-   ]]>
-       </failure>
-   </testcase>
-  </testsuite>
-
- */
-      Diff diff = CompareTwoObjectXML.compareXML(etalonXML, template,testXML,template );
-
-      System.out.println("Similar? " + diff.similar());
-      System.out.println("Identical? " + diff.identical());
-      if (diff.identical()){
-        Element testcase = doc.createElement("testcase");
-        testcase.setAttribute("name", "OBJECT.NAME.Имя");
-        testsuite.appendChild(testcase);
-        testsuite.setAttribute("tests", "1");
-      }
-
-      DetailedDiff detDiff = new DetailedDiff(diff);
-      List differences = detDiff.getAllDifferences();
-      for (Object object : differences) {
-        Difference difference = (Difference) object;
-        System.out.println("####################");
-        System.out.println(difference);
-        System.out.println("####################");
-      }
       // здесь пишем в файл
-      Transformer t = TransformerFactory.newInstance().newTransformer();
-      t.setOutputProperty(OutputKeys.INDENT, "yes");
-      t.transform(new DOMSource(doc), new StreamResult(new FileOutputStream("./" + "OBJECT-TEST.xml")));
-
-/*
-Вот xsd схема того как Jenkins обрабатывает XML от JUnit:
-https://svn.jenkins-ci.org/trunk/hudson/dtkit/dtkit-format/dtkit-junit-model/src/main/resources/com/thalesgroup/dtkit/junit/model/xsd/junit-4.xsd
-
-Исходя из этого получается:
-
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite
-           tests="Сколько тестов"
-           package="OBJECT" <- TABLE, SEQ и прочее
-           name="Из тега NAME"
->
-
-   <testcase name="Имя теста, приедся как то гененрить, посмотреть что есть в difference"> </testcase>
-   <testcase name="Это провальный тест, у нас походу всегда провальные?">
-     <failure message="test failure">Тут длинное описание то, что не совпало.
-</failure>
-
-   </testcase>
-</testsuite>
-
-Необходимо реализовать
-
- */
-              /*
-        if (difference != null) {
-          NodeDetail controlNode = difference.getControlNodeDetail();
-          NodeDetail testNode = difference.getTestNodeDetail();
-          String controlNodeValue = printNode(controlNode.getNode());
-          String testNodeValue = printNode(testNode.getNode());
-          if (controlNodeValue != null) {
-            System.out.println("####################");
-            System.out.println("Control Node: " + controlNodeValue);
-          }
-          if (testNodeValue != null) {
-            System.out.println("Test Node: " + testNodeValue);
-            System.out.println("####################");
-          }
-
-         */
-
-
-
-      /*
-      DetailedDiff detDiff = new DetailedDiff(diff);
-      detDiff.overrideMatchTracker(new MatchTrackerImpl());
-      detDiff.overrideElementQualifier(new ElementNameQualifier());
-      detDiff.getAllDifferences();
-*/
+     try(FileWriter fileWriter = new FileWriter("./" + "OBJECT-TEST.xml")){
+       fileWriter.write(testSute);
+     }
 
     } catch (SAXException e) {
       e.printStackTrace();
