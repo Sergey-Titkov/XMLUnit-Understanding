@@ -1,3 +1,5 @@
 *.iml
 .idea/
 target/
+*-TEST.xml
+*-TESTS.xml
