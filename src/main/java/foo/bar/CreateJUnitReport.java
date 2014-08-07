@@ -43,7 +43,7 @@ public class CreateJUnitReport {
     if (diff.identical()) {
       Element testcase = doc.createElement("testcase");
       testcase.setAttribute("classname", className);
-      testcase.setAttribute("name", type.toUpperCase() + " structure");
+      testcase.setAttribute("name", name.toUpperCase() + " structure");
       testsuite.appendChild(testcase);
     } else {
       // Формируем весь пакет различий

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <OBJECT>
   <CMNT>Некий объект</CMNT>
-  <NAME>OBJECT_NAME</NAME>
+  <NAME>USER_TABLE_ONE_DIFF</NAME>
   <ORDER_DOES_NOT_MATTER_LIST>
 
     <ORDER_DOES_NOT_MATTER_ITEM>
-      <CMNT>Это третий элемент</CMNT>
+      <CMNT>Это описание совершенно не верно</CMNT>
       <NAME>THIRD</NAME>
       <DATATYPE>CHAR</DATATYPE>
       <NOT_NULL/>

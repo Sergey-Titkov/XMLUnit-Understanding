@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <OBJECT>
-
-  <NAME>OBJECT_NAME</NAME>
   <CMNT>Некий объект</CMNT>
-
+  <NAME>USER_TABLE_SAME</NAME>
   <ORDER_DOES_NOT_MATTER_LIST>
 
     <ORDER_DOES_NOT_MATTER_ITEM>
-      <CMNT>Это второй элемент</CMNT>
-      <NAME>SECOND</NAME>
-      <DATATYPE>VARCAHR</DATATYPE>
-      <NOT_NULL/>
-    </ORDER_DOES_NOT_MATTER_ITEM>
-
-    <ORDER_DOES_NOT_MATTER_ITEM>
-      <CMNT>Это первый элемент</CMNT>
-      <DATATYPE>NUMBER</DATATYPE>
-      <NOT_NULL/>
-      <NAME>FIRST</NAME>
-    </ORDER_DOES_NOT_MATTER_ITEM>
-
-    <ORDER_DOES_NOT_MATTER_ITEM>
-      <NAME>THIRD</NAME>
       <CMNT>Это третий элемент</CMNT>
-      <NOT_NULL/>
+      <NAME>THIRD</NAME>
       <DATATYPE>CHAR</DATATYPE>
+      <NOT_NULL/>
+    </ORDER_DOES_NOT_MATTER_ITEM>
+
+    <ORDER_DOES_NOT_MATTER_ITEM>
+      <NAME>FIRST</NAME>
+      <DATATYPE>NUMBER</DATATYPE>
+      <CMNT>Это первый элемент</CMNT>
+      <NOT_NULL/>
+    </ORDER_DOES_NOT_MATTER_ITEM>
+
+    <ORDER_DOES_NOT_MATTER_ITEM>
+      <NOT_NULL/>
+      <NAME>SECOND</NAME>
+      <CMNT>Это второй элемент</CMNT>
+      <DATATYPE>VARCAHR</DATATYPE>
     </ORDER_DOES_NOT_MATTER_ITEM>
 
   </ORDER_DOES_NOT_MATTER_LIST>
 
-  <ORDER_IS_MATTER_LIST>
+<ORDER_IS_MATTER_LIST>
 
     <ORDER_IS_MATTER_ITEM>
       <NAME>FIRST</NAME>
@@ -65,5 +63,6 @@
     </ORDER_IS_MATTER_ITEM>
 
   </ORDER_IS_MATTER_LIST>
+
 
 </OBJECT>
