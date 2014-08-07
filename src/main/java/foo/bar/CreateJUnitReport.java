@@ -53,8 +53,9 @@ public class CreateJUnitReport {
       for (Object item : differences) {
         Difference difference = (Difference) item;
 
-        String shortDiff = ((Difference) item).getDescription();
         String fullDiff = ((Difference) item).toString();
+        String marker = "- comparing";
+        String shortDiff = fullDiff.substring(0,fullDiff.indexOf(marker)+marker.length());
 
         Element testcase = doc.createElement("testcase");
         testcase.setAttribute("classname", className);

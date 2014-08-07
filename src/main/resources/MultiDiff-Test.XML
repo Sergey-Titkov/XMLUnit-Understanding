@@ -29,7 +29,18 @@
 
 <ORDER_IS_MATTER_LIST>
 
-    <ORDER_IS_MATTER_ITEM>
+  <ORDER_IS_MATTER_ITEM>
+    <NAME>THIRD</NAME>
+    <COL_LIST>
+      <COL_LIST_ITEM>
+        <NAME>0003</NAME>
+        <NAME>0002</NAME>
+        <NAME>0001</NAME>
+      </COL_LIST_ITEM>
+    </COL_LIST>
+  </ORDER_IS_MATTER_ITEM>
+
+  <ORDER_IS_MATTER_ITEM>
       <NAME>FIRST</NAME>
       <COL_LIST>
         <COL_LIST_ITEM>
@@ -51,16 +62,6 @@
       </COL_LIST>
     </ORDER_IS_MATTER_ITEM>
 
-    <ORDER_IS_MATTER_ITEM>
-      <NAME>THIRD</NAME>
-      <COL_LIST>
-        <COL_LIST_ITEM>
-          <NAME>0003</NAME>
-          <NAME>0002</NAME>
-          <NAME>0001</NAME>
-        </COL_LIST_ITEM>
-      </COL_LIST>
-    </ORDER_IS_MATTER_ITEM>
 
   </ORDER_IS_MATTER_LIST>
 
