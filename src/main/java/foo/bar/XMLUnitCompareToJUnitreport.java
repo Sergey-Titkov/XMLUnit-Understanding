@@ -7,65 +7,77 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.*;
 
+/**
+ * Демонстрация работы классов.
+ */
 public class XMLUnitCompareToJUnitreport {
-
+  /**
+   * Читаем файл из ресурсов приложения. Не забыть добавить / по вскусу.
+   *
+   * @param resourceName Имя файла.
+   * @return Содержимое в виде строки
+   * @throws IOException
+   */
   private static String readResourceToString(String resourceName) throws IOException {
-    String result = "";
+    String result;
     // Прочитать ресурс в строку, везде кодировка UTF-8
     try (BufferedReader bufferedReader = new BufferedReader(
       new FileReader(
         XMLUnitCompareToJUnitreport.class.getResource(resourceName).getPath()
       )
     )) {
-      StringBuffer stringBuffer = new StringBuffer();
-      String currentLine = "";
+      StringBuilder stringBuilder = new StringBuilder();
+      String currentLine;
       while ((currentLine = bufferedReader.readLine()) != null) {
-        stringBuffer.append(currentLine).append("\n");
+        stringBuilder.append(currentLine).append("\n");
       }
-      result = stringBuffer.toString();
+      result = stringBuilder.toString();
     }
     return result;
   }
 
+  /**
+   * :)
+   *
+   * @param args Это и так понятно.
+   */
   public static void main(String[] args) {
-    // Что должно получиться? И проверить, что jenkins корретно все подцепил
-    // Один объект с небольшими различиями
-    // Один с большими различиями.
 
     try {
       // XML полностью совпадают.
-      compareTwoXML("/SameStructure-Etalon.XML","/SameStructure-Test.XML", "/Table-Sort.XSLT" );
+      compareTwoXML("/SameStructure-Etalon.XML", "/SameStructure-Test.XML", "/Table-Sort.XSLT");
 
       // XML содержит одно различие.
-      compareTwoXML("/OneDiff-Etalon.XML","/OneDiff-Test.XML", "/Table-Sort.XSLT" );
+      compareTwoXML("/OneDiff-Etalon.XML", "/OneDiff-Test.XML", "/Table-Sort.XSLT");
 
       // XML содержит множественные различия.
-      compareTwoXML("/MultiDiff-Etalon.XML","/MultiDiff-Test.XML", "/Table-Sort.XSLT" );
+      compareTwoXML("/MultiDiff-Etalon.XML", "/MultiDiff-Test.XML", "/Table-Sort.XSLT");
 
       // XML содержит различия в структуре.
 
-    } catch (SAXException e) {
+    } catch (SAXException|IOException|ParserConfigurationException|TransformerException|XPathExpressionException e) {
       e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (ParserConfigurationException e) {
-      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-    } catch (TransformerConfigurationException e) {
-      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-    } catch (TransformerException e) {
-      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-    } catch (XPathExpressionException e) {
-      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
     }
   }
 
+  /**
+   * Сравнивает два XML, предварительно применив к ним шаблон XSLT.
+   *
+   * @param nameEtalonXML Имя файла с эталонным XML
+   * @param nameTestXML   Имя файла с тестовым XML
+   * @param nameTemplate  Имя файла с шаблоном XSLT
+   * @throws IOException
+   * @throws TransformerException
+   * @throws ParserConfigurationException
+   * @throws SAXException
+   * @throws XPathExpressionException
+   */
   private static void compareTwoXML(
     String nameEtalonXML,
     String nameTestXML,
@@ -82,6 +94,7 @@ public class XMLUnitCompareToJUnitreport {
 
     Diff diff = CompareTwoObjectXML.compareXML(etalonXML, template, testXML, template);
 
+    // А вот это нужно, что бы получить наименование корневой ноды в XML и имя объекта. Проще не придумал.
     Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
       new InputSource(
         new StringReader(
