@@ -1,16 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>foo.bar</groupId>
-  <artifactId>XMLUnit-Understanding</artifactId>
-  <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <groupId>${app.groupid}</groupId>
+  <artifactId>${app.artifactId}</artifactId>
+  <packaging>pom</packaging>
+  <version>${app.version}</version>
+  <modules>
+    <module>XMLUnitToJUnitReport</module>
+  </modules>
   <name>XMLUnit-Understanding</name>
   <url>http://maven.apache.org</url>
 
   <properties>
     <!-- Свойства проекта -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <app.groupid>foo.bar</app.groupid>
+    <app.artifactId>XMLUnit-Understanding</app.artifactId>
+    <app.version>1.0-SNAPSHOT</app.version>
 
     <!-- Java ваш кэп -->
     <java-version>1.7</java-version>

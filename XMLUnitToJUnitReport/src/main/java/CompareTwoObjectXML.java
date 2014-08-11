@@ -1,5 +1,3 @@
-package foo.bar;
-
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.xml.sax.SAXException;

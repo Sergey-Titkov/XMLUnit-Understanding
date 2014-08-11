@@ -1,5 +1,3 @@
-package foo.bar;
-
 import org.custommonkey.xmlunit.Diff;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;

@@ -1,5 +1,3 @@
-package foo.bar;
-
 import org.custommonkey.xmlunit.DetailedDiff;
 import org.custommonkey.xmlunit.Diff;
 import org.w3c.dom.CDATASection;
@@ -31,6 +29,7 @@ public class CreateJUnitReport {
    *     <testsuite name="<type>.<name>" tests="1">
    *     <testcase classname="<type>.<name>" name=<name> + " structure""/>
    *   </testsuite>
+   *
    * Примеры:
    *   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
    *     <testsuite name="OBJECT.USER_TABLE_SAME" tests="1">
